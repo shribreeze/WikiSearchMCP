@@ -11,9 +11,10 @@ const server = new McpServer({
     version: "1.0.0",
 });
 async function fetchWikipediaSummary(query) {
-    let cleanedQuery = query.split(" ")[0];
-    cleanedQuery = encodeURIComponent(cleanedQuery.trim());
-    const response = await fetch(`${WIKI_API_BASE}${cleanedQuery}`);
+    let myQuery = query.split(" ")[0];
+    myQuery = encodeURIComponent(myQuery.trim());
+    //const myQuery = encodeURIComponent(query); In this case, claude is modifying the query.
+    const response = await fetch(`${WIKI_API_BASE}${myQuery}`);
     if (!response.ok) {
         return `Wikipedia search failed (Error ${response.status}). Try a more specific topic.`;
     }
