@@ -11,18 +11,14 @@ const server = new McpServer({
     version: "1.0.0",
 });
 async function fetchWikipediaSummary(query) {
-    const formattedQuery = encodeURIComponent(query);
-    const response = await fetch(`${WIKI_API_BASE}${formattedQuery}`);
+    let cleanedQuery = query.split(" ")[0];
+    cleanedQuery = encodeURIComponent(cleanedQuery.trim());
+    const response = await fetch(`${WIKI_API_BASE}${cleanedQuery}`);
     if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        return `Wikipedia search failed (Error ${response.status}). Try a more specific topic.`;
     }
     const data = (await response.json());
-    if (data.extract) {
-        return data.extract;
-    }
-    else {
-        return "No summary found for this topic.";
-    }
+    return data.extract || "No summary found for this topic.";
 }
 //mcp server tool
 server.tool("wikisearch", "Search Wikipedia for a given topic", {
